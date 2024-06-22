@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "208205097861",
+    "project_id": "ian-project-48398",
+    "storage_bucket": "ian-project-48398.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:208205097861:android:3552198658b192e09432ec",
+        "android_client_info": {
+          "package_name": "ian.coding"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASq9iT07jyJvC_wLL1T-2rwurGcAjjYmY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
