@@ -13,11 +13,21 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -32,31 +42,55 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
-import net.ezra.R
-import net.ezra.navigation.*
+import net.ezra.navigation.ROUTE_ADD_PRODUCT
+import net.ezra.navigation.ROUTE_ADD_SPECIALOFFER
+import net.ezra.navigation.ROUTE_HOME
+import net.ezra.navigation.ROUTE_LOGIN
+import net.ezra.navigation.ROUTE_SHOPPING_CART
+import net.ezra.navigation.ROUTE_USER_DASHBOARD
+import net.ezra.navigation.ROUTE_VIEW_PROD
+import net.ezra.navigation.ROUTE_VIEW_SPECIALOFFER
 import net.ezra.ui.products.Product
 import net.ezra.ui.products.ProductListItem
 import net.ezra.ui.products.fetchProducts
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 data class Screen(val title: String, val icon: Int)
 
@@ -72,6 +106,7 @@ fun HomeScreen(navController: NavHostController) {
     var isLoading by remember { mutableStateOf(true) }
     var displayedProductCount by remember { mutableStateOf(1) }
     var progress by remember { mutableStateOf(0) }
+    var userEmail by remember { mutableStateOf("No Email") }
 
     val callLauncher: ManagedActivityResultLauncher<Intent, ActivityResult> =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) { _ -> }
@@ -107,6 +142,7 @@ fun HomeTopBar(searchQuery: String, onSearchQueryChange: (String) -> Unit, locat
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
+
                 OutlinedTextField(
                     value = searchQuery,
                     onValueChange = onSearchQueryChange,
@@ -176,19 +212,31 @@ fun HomeContent(
             .fillMaxSize()
             .clickable { if (isDrawerOpen) onDrawerClose() }
     ) {
+        Spacer(modifier = Modifier.height(30.dp))
             Column(
+                
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.White),
             ) {
+
+                Spacer(modifier = Modifier.height(80.dp))
+                Row{
+                    Text("Special Offers")
+                    Spacer(modifier = Modifier.width(130.dp))
+                    Text("View All", modifier = Modifier.clickable { navController.navigate(
+                        ROUTE_VIEW_SPECIALOFFER) })
+                }
                 Row {
                     SpecialOffers()
                 }
 
                 Row {
                     Text("Jordan 1's")
-                    Spacer(modifier = Modifier.width(70.dp))
-                    Text("View All", modifier = Modifier.clickable { navController.navigate(ROUTE_VIEW_PROD) })
+                    Spacer(modifier = Modifier.width(130.dp))
+                    Text("View All",
+                        modifier = Modifier.clickable { navController.navigate(ROUTE_VIEW_PROD) },
+                    )
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 if (isLoading) {
@@ -284,7 +332,7 @@ fun BottomBar(navController: NavHostController) {
                 selected = (selectedIndex.value == 3),
                 onClick = {
                     selectedIndex.value = 3
-                    navController.navigate("profile") { popUpTo("home") { inclusive = true } }
+                    navController.navigate(ROUTE_SHOPPING_CART) { popUpTo("home") { inclusive = true } }
                 }
             )
             BottomNavigationItem(
@@ -296,7 +344,7 @@ fun BottomBar(navController: NavHostController) {
                     if (isLoggedIn) {
                         navController.navigate(ROUTE_USER_DASHBOARD) { popUpTo("home") { inclusive = true } }
                     } else {
-                        navController.navigate(ROUTE_LOGIN) { popUpTo("home") { inclusive = true } }
+                        navController.navigate(ROUTE_LOGIN) { popUpTo(ROUTE_HOME) { inclusive = true } }
                     }
                 }
             )
@@ -305,7 +353,6 @@ fun BottomBar(navController: NavHostController) {
                 selected = (selectedIndex.value == 2),
                 onClick = {
                     selectedIndex.value = 2
-                    navController.navigate(ROUTE_ADD_SPECIALOFFER) { popUpTo("home") { inclusive = true } }
                 }
             )
             BottomNavigationItem(
@@ -336,78 +383,101 @@ data class SpecialOffer(val discount: String, val productName: String, val descr
 @Composable
 fun SpecialOffers() {
     var specialOffer by remember { mutableStateOf<SpecialOffer?>(null) }
+    var isLoading by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
         fetchSingleSpecialOffer { offer ->
             specialOffer = offer
+            isLoading = false
         }
     }
 
-    specialOffer?.let { offer ->
-        Card(
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(Color.Black),
+    if (isLoading) {
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
                 .height(150.dp)
+                .background(Color.DarkGray),
+            contentAlignment = Alignment.Center
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.padding(16.dp)
+            CircularProgressIndicator(color = Color.White)
+        }
+    } else {
+        specialOffer?.let { offer ->
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(Color.Black),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .height(150.dp)
             ) {
-                Column {
-                    Text(
-                        text = offer.discount,
-                        color = Color.White,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = offer.productName,
-                        color = Color.White,
-                        fontSize = 16.sp
-                    )
-                    Text(
-                        text = offer.description,
-                        color = Color.White,
-                        fontSize = 12.sp
-                    )
-                    Text(
-                        text = offer.price,
-                        color = Color.White,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Column {
+                        Text(
+                            text = offer.discount,
+                            color = Color.White,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = offer.productName,
+                            color = Color.White,
+                            fontSize = 16.sp
+                        )
+                        Text(
+                            text = offer.description,
+                            color = Color.White,
+                            fontSize = 12.sp
+                        )
+                        Text(
+                            text = offer.price,
+                            color = Color.White,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Image(
+                        painter = rememberImagePainter(data = offer.imageUrl),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(RoundedCornerShape(16.dp)),
+                        contentScale = ContentScale.Crop,
                     )
                 }
-                Image(
-                    painter = rememberImagePainter(data = offer.imageUrl),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(RoundedCornerShape(16.dp)),
-                    contentScale = ContentScale.Crop
-                )
             }
         }
     }
 }
 
+
+
 fun fetchSingleSpecialOffer(onComplete: (SpecialOffer?) -> Unit) {
-    val db = FirebaseFirestore.getInstance()
-    val docRef = db.collection("special offers").document("offer1")
+    val db = Firebase.firestore
+    val collectionRef = db.collection("special offers")
 
-    docRef.get()
-        .addOnSuccessListener { document ->
-            if (document != null) {
-                val discount = document.getString("discount") ?: "N/A"
-                val productName = document.getString("productName") ?: "N/A"
-                val description = document.getString("description") ?: "N/A"
-                val price = document.getString("price") ?: "N/A"
-                val imageUrl = document.getString("imageUrl") ?: ""
+    // Assuming "offer1" is the document ID you want to fetch
+    val documentId = "4da8be58-a2d2-42e3-82e3-cfd29bcce340"
 
-                onComplete(SpecialOffer(discount, productName, description, price, imageUrl))
+    collectionRef.document(documentId)
+        .get()
+        .addOnSuccessListener { snapshot ->
+            if (snapshot.exists()) {
+                val data = snapshot.data
+                val discount = data?.get("discount") as? String ?: "N/A"
+                val productName = data?.get("name") as? String ?: "N/A"
+                val description = data?.get("description") as? String ?: "N/A"
+                val price = data?.get("price") as? Double ?: "N/A"
+                val imageUrl = data?.get("imageUrl") as? String ?: ""
+
+                onComplete(SpecialOffer(discount, productName, description,
+                    price.toString(), imageUrl))
             } else {
                 onComplete(null)
             }

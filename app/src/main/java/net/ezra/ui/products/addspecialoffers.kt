@@ -66,7 +66,7 @@ fun AddspecialoffersScreen(navController: NavController, onProductAdded: () -> U
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = "Add Products", fontSize = 24.sp, color = Color.Black)
+                    Text(text = "ADD SPECIAL OFFERS", fontSize = 24.sp, color = Color.Black)
                 },
                 navigationIcon = {
                     IconButton(onClick = {
@@ -80,8 +80,8 @@ fun AddspecialoffersScreen(navController: NavController, onProductAdded: () -> U
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(0xffffa500),
-                    titleContentColor = Color.Black,
+                    containerColor = Color.Gray,
+                    titleContentColor = Color.White,
                 )
             )
         },
@@ -129,8 +129,8 @@ fun AddspecialoffersScreen(navController: NavController, onProductAdded: () -> U
                         modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = Color(0xff0FB06A),
-                            unfocusedBorderColor = Color(0xffffa500),
-                            unfocusedLabelColor = Color(0xffffa500),
+                            unfocusedBorderColor = Color.Gray,
+                            unfocusedLabelColor = Color.Gray,
                             focusedLabelColor = Color.White,
                             cursorColor = Color(0xff0FB06A),
                             textColor = Color.White
@@ -146,8 +146,8 @@ fun AddspecialoffersScreen(navController: NavController, onProductAdded: () -> U
                         modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = Color(0xff0FB06A),
-                            unfocusedBorderColor = Color(0xffffa500),
-                            unfocusedLabelColor = Color(0xffffa500),
+                            unfocusedBorderColor = Color.Gray,
+                            unfocusedLabelColor = Color.Gray,
                             focusedLabelColor = Color.White,
                             cursorColor = Color(0xff0FB06A),
                             textColor = Color.White
@@ -164,8 +164,8 @@ fun AddspecialoffersScreen(navController: NavController, onProductAdded: () -> U
                         modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = Color(0xff0FB06A),
-                            unfocusedBorderColor = Color(0xffffa500),
-                            unfocusedLabelColor = Color(0xffffa500),
+                            unfocusedBorderColor = Color.Gray,
+                            unfocusedLabelColor = Color.Gray,
                             focusedLabelColor = Color.White,
                             cursorColor = Color(0xff0FB06A),
                             textColor = Color.White
@@ -208,7 +208,7 @@ fun AddspecialoffersScreen(navController: NavController, onProductAdded: () -> U
                                 )
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(Color(0xffffa500)),
+                        colors = ButtonDefaults.buttonColors(Color.Gray),
                         modifier = Modifier
                             .clickable(indication = rememberRipple(bounded = true), interactionSource = remember { MutableInteractionSource() }) { /* Handle click */ }
                             .padding(16.dp),

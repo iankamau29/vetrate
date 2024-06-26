@@ -1,12 +1,16 @@
 package net.ezra.ui.auth
 
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -48,7 +52,7 @@ fun LoginScreen(navController: NavController, onLoginSuccess: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black),
+            .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -58,7 +62,7 @@ fun LoginScreen(navController: NavController, onLoginSuccess: () -> Unit) {
             text = "Login",
             style = MaterialTheme.typography.bodySmall.copy(
                 fontSize = 32.sp,
-                color = Color(0xffffa500),
+                color = Color.Gray,
                 fontWeight = FontWeight.Bold
             ),
             modifier = Modifier.padding(bottom = 16.dp)
@@ -72,12 +76,12 @@ fun LoginScreen(navController: NavController, onLoginSuccess: () -> Unit) {
                 .width(350.dp)
                 .padding(bottom = 8.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color(0xff0FB06A),
-                unfocusedBorderColor = Color(0xffffa500),
-                unfocusedLabelColor = Color(0xffffa500),
-                focusedLabelColor = Color.White,
-                cursorColor = Color(0xff0FB06A),
-                textColor = Color.White
+                focusedBorderColor = Color.Gray,
+                unfocusedBorderColor = Color.Gray,
+                unfocusedLabelColor = Color.Gray,
+                focusedLabelColor = Color.Gray,
+                cursorColor = Color.Gray,
+                textColor = Color.Gray
             )
         )
 
@@ -90,12 +94,12 @@ fun LoginScreen(navController: NavController, onLoginSuccess: () -> Unit) {
                 .width(350.dp)
                 .padding(bottom = 16.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color(0xff0FB06A),
-                unfocusedBorderColor = Color(0xffffa500),
-                unfocusedLabelColor = Color(0xffffa500),
-                focusedLabelColor = Color.White,
-                cursorColor = Color(0xff0FB06A),
-                textColor = Color.White
+                focusedBorderColor = Color.Gray,
+                unfocusedBorderColor = Color.Gray,
+                unfocusedLabelColor = Color.Gray,
+                focusedLabelColor = Color.Gray,
+                cursorColor = Color.Gray,
+                textColor = Color.Gray
             )
         )
 
@@ -104,7 +108,7 @@ fun LoginScreen(navController: NavController, onLoginSuccess: () -> Unit) {
                 modifier = Modifier
                     .size(48.dp)
                     .padding(bottom = 16.dp),
-                color = Color(0xff0FB06A)
+                color = Color.Gray
             )
         } else {
             Button(
@@ -133,7 +137,7 @@ fun LoginScreen(navController: NavController, onLoginSuccess: () -> Unit) {
                 modifier = Modifier
                     .width(100.dp)
                     .padding(bottom = 8.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xffffa500))
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray)
             ) {
                 Text("Login", color = Color.White)
             }
@@ -148,7 +152,7 @@ fun LoginScreen(navController: NavController, onLoginSuccess: () -> Unit) {
                     }
                     .padding(8.dp),
                 textAlign = TextAlign.Center,
-                color = Color.White
+                color = Color.Gray
             )
             Text(
                 text = "SKIP AND GO HOME ?",
@@ -160,14 +164,14 @@ fun LoginScreen(navController: NavController, onLoginSuccess: () -> Unit) {
                     }
                     .padding(8.dp),
                 textAlign = TextAlign.Center,
-                color = Color(0xff0FB06A)
+                color = Color.Gray
             )
         }
 
         error?.let {
             Text(
                 text = it,
-                color = MaterialTheme.colorScheme.error,
+                color = Color.Red,
                 modifier = Modifier.padding(top = 8.dp),
                 style = MaterialTheme.typography.bodySmall
             )
@@ -187,7 +191,7 @@ fun AuthHead() {
         Text(
             text = "Welcome Back!",
             style = MaterialTheme.typography.headlineLarge.copy(
-                color = Color(0xff0FB06A),
+                color = Color.Gray,
                 fontWeight = FontWeight.Bold
             ),
             modifier = Modifier.padding(bottom = 8.dp)

@@ -9,7 +9,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +48,6 @@ fun SignUpScreen(navController: NavController, onSignUpSuccess: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
             .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -53,7 +58,7 @@ fun SignUpScreen(navController: NavController, onSignUpSuccess: () -> Unit) {
             text = "Sign Up",
             style = MaterialTheme.typography.h4.copy(
                 fontSize = 32.sp,
-                color = Color(0xff0FB06A)
+                color = Color.Gray
             ),
             modifier = Modifier.padding(bottom = 16.dp)
         )
@@ -63,11 +68,12 @@ fun SignUpScreen(navController: NavController, onSignUpSuccess: () -> Unit) {
             onValueChange = { email = it },
             label = { Text("Email") },
             modifier = Modifier
-                .fillMaxWidth()
+                .width(350.dp)
                 .padding(bottom = 8.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color(0xff0FB06A),
-                cursorColor = Color(0xff0FB06A)
+                focusedBorderColor = Color.Gray,
+                cursorColor = Color.Gray,
+                textColor = Color.Black
             )
         )
 
@@ -77,11 +83,12 @@ fun SignUpScreen(navController: NavController, onSignUpSuccess: () -> Unit) {
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier
-                .fillMaxWidth()
+                .width(350.dp)
                 .padding(bottom = 8.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color(0xff0FB06A),
-                cursorColor = Color(0xff0FB06A)
+                focusedBorderColor = Color.Gray,
+                cursorColor = Color.Gray,
+                textColor = Color.Black
             )
         )
 
@@ -91,11 +98,12 @@ fun SignUpScreen(navController: NavController, onSignUpSuccess: () -> Unit) {
             label = { Text("Confirm Password") },
             visualTransformation = PasswordVisualTransformation(),
             modifier = Modifier
-                .fillMaxWidth()
+                .width(350.dp)
                 .padding(bottom = 16.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color(0xff0FB06A),
-                cursorColor = Color(0xff0FB06A)
+                focusedBorderColor = Color.Gray,
+                cursorColor = Color.Gray,
+                textColor = Color.Black
             )
         )
 
@@ -103,7 +111,8 @@ fun SignUpScreen(navController: NavController, onSignUpSuccess: () -> Unit) {
             CircularProgressIndicator(
                 modifier = Modifier
                     .size(48.dp)
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 16.dp),
+                color = Color.Gray
             )
         } else {
             Button(
@@ -127,9 +136,9 @@ fun SignUpScreen(navController: NavController, onSignUpSuccess: () -> Unit) {
                     }
                 },
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .width(100.dp)
                     .padding(bottom = 8.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff0FB06A)),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Text("Sign Up", color = Color.White)
@@ -145,26 +154,21 @@ fun SignUpScreen(navController: NavController, onSignUpSuccess: () -> Unit) {
                     }
                     .padding(8.dp),
                 textAlign = TextAlign.Center,
-                color = Color(0xff0FB06A)
+                color = Color.Gray
             )
         }
 
         error?.let {
             Text(
                 text = it,
-                color = MaterialTheme.colors.error,
+                color = Color.Red,
                 modifier = Modifier.padding(top = 8.dp)
             )
         }
     }
 }
 
-//@Composable
-//fun AuthHeader() {
-//    // Add your custom header implementation here
-//}
-
-private fun signUp( email: String, password: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
+private fun signUp(email: String, password: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
     FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {

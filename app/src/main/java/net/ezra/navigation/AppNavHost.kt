@@ -1,5 +1,7 @@
 package net.ezra.navigation
 
+//import net.ezra.ui.auth.SignupScreen
+import UserDashboardScreen
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,17 +14,23 @@ import net.ezra.ui.SplashScreen
 import net.ezra.ui.about.AboutScreen
 import net.ezra.ui.auth.LoginScreen
 import net.ezra.ui.auth.SignUpScreen
+
+import net.ezra.ui.cart.ShoppingCartScreen
 import net.ezra.ui.dashboard.DashboardScreen
-import net.ezra.ui.dashboard.UserDashboardScreen
-//import net.ezra.ui.auth.SignupScreen
+
 import net.ezra.ui.home.HomeScreen
 import net.ezra.ui.products.AddProductScreen
 import net.ezra.ui.products.AddspecialoffersScreen
+import net.ezra.ui.products.CartItem
+import net.ezra.ui.products.CartState
+import net.ezra.ui.products.CartState.cartItems
 import net.ezra.ui.products.ProductDetailScreen
 import net.ezra.ui.products.ProductListScreen
+
 import net.ezra.ui.students.AddStudents
 import net.ezra.ui.students.Search
 import net.ezra.ui.students.Students
+
 
 @Composable
 fun AppNavHost(
@@ -98,7 +106,6 @@ fun AppNavHost(
         composable(ROUTE_VIEW_PROD) {
             ProductListScreen(navController = navController, products = listOf() )
         }
-
         composable("productDetail/{productId}") { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("productId") ?: ""
             ProductDetailScreen(navController, productId)
@@ -106,7 +113,9 @@ fun AppNavHost(
         composable(ROUTE_USER_DASHBOARD) {
             UserDashboardScreen(navController = navController)
             }
-
+        composable(ROUTE_SHOPPING_CART) {
+            ShoppingCartScreen(navController = navController)
+        }
 
 
 
@@ -148,3 +157,6 @@ fun AppNavHost(
 
     }
 }
+
+
+

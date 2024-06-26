@@ -66,7 +66,7 @@ fun AddProductScreen(navController: NavController, onProductAdded: () -> Unit) {
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = "Add Products", fontSize = 24.sp, color = Color.Black)
+                    Text(text = "Add Products", fontSize = 24.sp, color = Color.White)
                 },
                 navigationIcon = {
                     IconButton(onClick = {
@@ -80,7 +80,7 @@ fun AddProductScreen(navController: NavController, onProductAdded: () -> Unit) {
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(0xffffa500),
+                    containerColor = Color.Gray,
                     titleContentColor = Color.Black,
                 )
             )
@@ -129,8 +129,8 @@ fun AddProductScreen(navController: NavController, onProductAdded: () -> Unit) {
                         modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = Color(0xff0FB06A),
-                            unfocusedBorderColor = Color(0xffffa500),
-                            unfocusedLabelColor = Color(0xffffa500),
+                            unfocusedBorderColor = Color.Gray,
+                            unfocusedLabelColor = Color.Gray,
                             focusedLabelColor = Color.White,
                             cursorColor = Color(0xff0FB06A),
                             textColor = Color.White
@@ -146,8 +146,8 @@ fun AddProductScreen(navController: NavController, onProductAdded: () -> Unit) {
                         modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = Color(0xff0FB06A),
-                            unfocusedBorderColor = Color(0xffffa500),
-                            unfocusedLabelColor = Color(0xffffa500),
+                            unfocusedBorderColor = Color.Gray,
+                            unfocusedLabelColor = Color.Gray,
                             focusedLabelColor = Color.White,
                             cursorColor = Color(0xff0FB06A),
                             textColor = Color.White
@@ -164,8 +164,8 @@ fun AddProductScreen(navController: NavController, onProductAdded: () -> Unit) {
                         modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = Color(0xff0FB06A),
-                            unfocusedBorderColor = Color(0xffffa500),
-                            unfocusedLabelColor = Color(0xffffa500),
+                            unfocusedBorderColor = Color.Gray,
+                            unfocusedLabelColor = Color.Gray,
                             focusedLabelColor = Color.White,
                             cursorColor = Color(0xff0FB06A),
                             textColor = Color.White
@@ -208,7 +208,7 @@ fun AddProductScreen(navController: NavController, onProductAdded: () -> Unit) {
                                 )
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(Color(0xffffa500)),
+                        colors = ButtonDefaults.buttonColors(Color.Gray),
                         modifier = Modifier
                             .clickable(indication = rememberRipple(bounded = true), interactionSource = remember { MutableInteractionSource() }) { /* Handle click */ }
                             .padding(16.dp),

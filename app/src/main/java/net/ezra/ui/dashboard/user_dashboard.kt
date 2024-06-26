@@ -1,5 +1,3 @@
-package net.ezra.ui.dashboard
-
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
@@ -24,8 +22,8 @@ import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import net.ezra.navigation.ROUTE_ADD_PRODUCT
 import net.ezra.navigation.ROUTE_ADD_STUDENTS
-import net.ezra.navigation.ROUTE_DASHBOARD
 import net.ezra.navigation.ROUTE_HOME
 import net.ezra.navigation.ROUTE_LOGIN
 
@@ -36,8 +34,8 @@ fun UserDashboardScreen(navController: NavHostController) {
     val context = LocalContext.current
     val sharedPreferences: SharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
     val isLoggedIn: Boolean = sharedPreferences.getBoolean("isLoggedIn", false)
-    val email: String? = sharedPreferences.getString("userEmail", "No Email")
-    var userName by remember { mutableStateOf("Fetching...") }
+    var userEmail by remember { mutableStateOf("No Email") }
+    var userName by remember { mutableStateOf("No Name") }
 
     if (!isLoggedIn) {
         LaunchedEffect(Unit) {
@@ -49,11 +47,10 @@ fun UserDashboardScreen(navController: NavHostController) {
         }
     } else {
         LaunchedEffect(Unit) {
-            val user = FirebaseAuth.getInstance().currentUser
-            if (user != null) {
-                fetchUserData(user) { name ->
-                    userName = name
-                }
+            val currentUser = FirebaseAuth.getInstance().currentUser
+            if (currentUser != null) {
+                userEmail = currentUser.email ?: "No Email"
+                userName = currentUser.displayName ?: "No Name"
             }
         }
 
@@ -99,7 +96,7 @@ fun UserDashboardScreen(navController: NavHostController) {
                         }
                     },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = Color(0xff0FB06A)
+                        containerColor = Color.Gray
                     )
                 )
             },
@@ -107,22 +104,22 @@ fun UserDashboardScreen(navController: NavHostController) {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.Black)
+                        .background(Color.White)
                         .padding(16.dp)
                 ) {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(Color.Black)
+                            .background(Color.White)
                             .padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "Welcome, $userName!",
+                            text = "Welcome",
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontSize = 32.sp,
-                                color = Color(0xff0FB06A),
+                                color = Color.Gray,
                                 fontWeight = FontWeight.Bold
                             ),
                             modifier = Modifier.padding(bottom = 16.dp),
@@ -130,10 +127,10 @@ fun UserDashboardScreen(navController: NavHostController) {
                         )
 
                         Text(
-                            text = "Email: $email",
+                            text = "Email: $userEmail",
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontSize = 20.sp,
-                                color = Color.White
+                                color = Color.Gray
                             ),
                             modifier = Modifier.padding(bottom = 16.dp),
                             textAlign = TextAlign.Center
@@ -150,13 +147,25 @@ fun UserDashboardScreen(navController: NavHostController) {
                             modifier = Modifier
                                 .padding(bottom = 16.dp)
                                 .fillMaxWidth(),
-                            colors = ButtonDefaults.buttonColors(Color(0xffffa500))
+                            colors = ButtonDefaults.buttonColors(Color.Gray)
                         ) {
                             Text("Go to Home", color = Color.White)
                         }
+                        Button(onClick = {
+                            navController.navigate(ROUTE_ADD_PRODUCT)
 
+                        },
+                            modifier = Modifier
+                                .padding(bottom = 16.dp)
+                                .fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(Color.Gray)
+                        ) {
+
+                            Text("Add Product")
+                        }
                         Button(
                             onClick = {
+                                FirebaseAuth.getInstance().signOut()
                                 val editor = sharedPreferences.edit()
                                 editor.putBoolean("isLoggedIn", false)
                                 editor.apply()
@@ -178,22 +187,4 @@ fun UserDashboardScreen(navController: NavHostController) {
             }
         )
     }
-}
-
-private fun fetchUserData(user: FirebaseUser, onResult: (String) -> Unit) {
-    val db = FirebaseFirestore.getInstance()
-    val userRef = db.collection("users").document(user.uid)
-
-    userRef.get()
-        .addOnSuccessListener { document ->
-            if (document != null && document.exists()) {
-                val userName = document.getString("name") ?: "No Name"
-                onResult(userName)
-            } else {
-                onResult("No Name")
-            }
-        }
-        .addOnFailureListener {
-            onResult("Error fetching name")
-        }
 }

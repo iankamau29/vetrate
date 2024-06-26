@@ -10,23 +10,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d3db7d73-9716-47f0-a10a-802f00b31f2b" name="Changes" comment="new">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/dashboard/user_dashboard.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/products/addspecialoffers.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/products/viewspecialoffers.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/logo_2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/products/shopping_cart.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/products/state.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.3.3/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.3/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.3.3/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.3/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.3.3/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.3/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.3.3/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.3/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.3.3/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.3.3/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/net/ezra/navigation/AppNavHost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/ezra/navigation/AppNavHost.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/net/ezra/navigation/Routes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/ezra/navigation/Routes.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/Splash.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/Splash.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/auth/Register.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/auth/Register.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/auth/SignIn.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/auth/SignIn.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/dashboard/Dashboard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/dashboard/Dashboard.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/dashboard/user_dashboard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/dashboard/user_dashboard.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/home/HomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/home/HomeScreen.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/products/AddProducts.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/products/AddProducts.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/products/Details.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/products/Details.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/products/Viewproducts.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/products/Viewproducts.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/products/addspecialoffers.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/net/ezra/ui/products/addspecialoffers.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +42,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=095973736H001542)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -45,6 +51,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Kotlin Class" />
         <option value="Kotlin File" />
       </list>
     </option>
@@ -63,21 +70,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Android App.app.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/User/OneDrive/Emobilis/android"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Android App.app.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/User/OneDrive/Emobilis/vetrate&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="ian_project.app.main" />
