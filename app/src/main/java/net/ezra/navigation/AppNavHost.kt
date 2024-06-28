@@ -1,7 +1,8 @@
 package net.ezra.navigation
 
+
+
 //import net.ezra.ui.auth.SignupScreen
-import UserDashboardScreen
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,19 +15,16 @@ import net.ezra.ui.SplashScreen
 import net.ezra.ui.about.AboutScreen
 import net.ezra.ui.auth.LoginScreen
 import net.ezra.ui.auth.SignUpScreen
-
-import net.ezra.ui.cart.ShoppingCartScreen
+import net.ezra.ui.products.ShoppingCartScreen
 import net.ezra.ui.dashboard.DashboardScreen
-
+import net.ezra.ui.dashboard.UserDashboardScreen
 import net.ezra.ui.home.HomeScreen
 import net.ezra.ui.products.AddProductScreen
 import net.ezra.ui.products.AddspecialoffersScreen
-import net.ezra.ui.products.CartItem
-import net.ezra.ui.products.CartState
-import net.ezra.ui.products.CartState.cartItems
+import net.ezra.ui.products.OffersListScreen
 import net.ezra.ui.products.ProductDetailScreen
 import net.ezra.ui.products.ProductListScreen
-
+import net.ezra.ui.products.UserProductsScreen
 import net.ezra.ui.students.AddStudents
 import net.ezra.ui.students.Search
 import net.ezra.ui.students.Students
@@ -100,7 +98,7 @@ fun AppNavHost(
             AddspecialoffersScreen(navController = navController){}
         }
         composable(ROUTE_VIEW_SPECIALOFFER) {
-            AddspecialoffersScreen(navController = navController){}
+            OffersListScreen(navController = navController)
         }
 
         composable(ROUTE_VIEW_PROD) {
@@ -116,7 +114,9 @@ fun AppNavHost(
         composable(ROUTE_SHOPPING_CART) {
             ShoppingCartScreen(navController = navController)
         }
-
+        composable(ROUTE_VIEW_USER_PRODUCTS) {
+            UserProductsScreen(navController)
+        }
 
 
 

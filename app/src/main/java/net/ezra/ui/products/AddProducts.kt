@@ -9,36 +9,53 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
-import androidx.compose.material.*
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.ButtonDefaults
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import net.ezra.navigation.ROUTE_HOME
-import net.ezra.navigation.ROUTE_VIEW_PROD
-import java.util.*
+import net.ezra.navigation.ROUTE_VIEW_USER_PRODUCTS
+import java.util.UUID
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,7 +87,7 @@ fun AddProductScreen(navController: NavController, onProductAdded: () -> Unit) {
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.navigate(ROUTE_VIEW_PROD)
+                        navController.navigate(ROUTE_VIEW_USER_PRODUCTS)
                     }) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
@@ -212,7 +229,7 @@ fun AddProductScreen(navController: NavController, onProductAdded: () -> Unit) {
                         modifier = Modifier
                             .clickable(indication = rememberRipple(bounded = true), interactionSource = remember { MutableInteractionSource() }) { /* Handle click */ }
                             .padding(16.dp),
-                             shape = MaterialTheme.shapes.small
+                        shape = MaterialTheme.shapes.small
 
                     ) {
                         Text("Add Product", color = Color.White, fontSize = 16.sp)
@@ -259,13 +276,21 @@ private fun addProductToFirestore(
     }
 
     val productId = UUID.randomUUID().toString()
+    val currentUser = FirebaseAuth.getInstance().currentUser
+
+    if (currentUser == null) {
+        // Handle user not logged in
+        onLoadingChange(false)
+        return
+    }
 
     val firestore = Firebase.firestore
     val productData = hashMapOf(
         "name" to productName,
         "description" to productDescription,
         "price" to productPrice,
-        "imageUrl" to ""
+        "imageUrl" to "",
+        "userId" to currentUser.uid  // Associate product with the current user
     )
 
     firestore.collection("products").document(productId)
@@ -282,8 +307,8 @@ private fun addProductToFirestore(
                             Toast.LENGTH_SHORT
                         ).show()
 
-                        // Navigate to another screen
-                        navController.navigate(ROUTE_HOME)
+                        // Navigate to the user's products screen
+                        navController.navigate(ROUTE_VIEW_USER_PRODUCTS)
 
                         // Invoke the onProductAdded callback
                         onProductAdded()

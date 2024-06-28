@@ -17,7 +17,7 @@ const val ROUTE_VIEW_PROD = "view_prod"
 const val ROUTE_USER_DASHBOARD = "user_dashboard"
 const val ROUTE_SHOPPING_CART = "shopping_cart"
 const val ROUTE_PRODUCT_DETAIL = "product_detail"
-
+const val ROUTE_VIEW_USER_PRODUCTS = "view_products"
 
 
 

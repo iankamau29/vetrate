@@ -8,17 +8,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -28,6 +24,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import net.ezra.navigation.ROUTE_LOGIN
 import net.ezra.navigation.ROUTE_REGISTER
 
@@ -36,6 +35,7 @@ fun SignUpScreen(navController: NavController, onSignUpSuccess: () -> Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+    var userName by remember { mutableStateOf("") }
     var error by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -45,6 +45,7 @@ fun SignUpScreen(navController: NavController, onSignUpSuccess: () -> Unit) {
             userImageUri = it
         }
     }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,7 +53,6 @@ fun SignUpScreen(navController: NavController, onSignUpSuccess: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        AuthHeader()
 
         Text(
             text = "Sign Up",
@@ -61,6 +61,39 @@ fun SignUpScreen(navController: NavController, onSignUpSuccess: () -> Unit) {
                 color = Color.Gray
             ),
             modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        Box(
+            modifier = Modifier
+                .size(100.dp)
+                .clip(CircleShape)
+                .background(Color.Gray)
+                .clickable { launcher.launch("image/*") },
+            contentAlignment = Alignment.Center
+        ) {
+            userImageUri?.let {
+                Image(
+                    painter = rememberImagePainter(it),
+                    contentDescription = "Profile Picture",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(CircleShape)
+                )
+            } ?: Text("Tap to add photo", color = Color.White, textAlign = TextAlign.Center)
+        }
+
+        OutlinedTextField(
+            value = userName,
+            onValueChange = { userName = it },
+            label = { Text("Username") },
+            modifier = Modifier
+                .width(350.dp)
+                .padding(bottom = 8.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color.Gray,
+                cursorColor = Color.Gray,
+                textColor = Color.Black
+            )
         )
 
         OutlinedTextField(
@@ -122,9 +155,11 @@ fun SignUpScreen(navController: NavController, onSignUpSuccess: () -> Unit) {
                         password.isBlank() -> error = "Password is required"
                         confirmPassword.isBlank() -> error = "Password Confirmation required"
                         password != confirmPassword -> error = "Passwords do not match"
+                        userName.isBlank() -> error = "Username is required"
+                        userImageUri == null -> error = "Profile photo is required"
                         else -> {
                             isLoading = true
-                            signUp(email, password, {
+                            signUp(email, password, userName, userImageUri, {
                                 isLoading = false
                                 Toast.makeText(context, "Sign-up successful!", Toast.LENGTH_SHORT).show()
                                 onSignUpSuccess()
@@ -168,7 +203,14 @@ fun SignUpScreen(navController: NavController, onSignUpSuccess: () -> Unit) {
     }
 }
 
-private fun signUp(email: String, password: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
+private fun signUp(
+    email: String,
+    password: String,
+    userName: String,
+    userImageUri: Uri?,
+    onSuccess: () -> Unit,
+    onError: (String) -> Unit
+) {
     FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email)
         .addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -180,7 +222,36 @@ private fun signUp(email: String, password: String, onSuccess: () -> Unit, onErr
                     FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener { signUpTask ->
                             if (signUpTask.isSuccessful) {
-                                onSuccess()
+                                val user = FirebaseAuth.getInstance().currentUser
+                                user?.let {
+                                    val storageRef = FirebaseStorage.getInstance().reference
+                                    val profileImagesRef = storageRef.child("profileImages/${user.uid}.jpg")
+
+                                    userImageUri?.let { uri ->
+                                        profileImagesRef.putFile(uri)
+                                            .addOnSuccessListener { taskSnapshot ->
+                                                profileImagesRef.downloadUrl.addOnSuccessListener { uri ->
+                                                    val profileUpdates = userProfileChangeRequest {
+                                                        displayName = userName
+                                                        photoUri = uri
+                                                    }
+                                                    user.updateProfile(profileUpdates)
+                                                        .addOnCompleteListener { profileUpdateTask ->
+                                                            if (profileUpdateTask.isSuccessful) {
+                                                                onSuccess()
+                                                            } else {
+                                                                onError(profileUpdateTask.exception?.message ?: "Sign-up failed")
+                                                            }
+                                                        }
+                                                }
+                                            }
+                                            .addOnFailureListener { exception ->
+                                                onError(exception.message ?: "Image upload failed")
+                                            }
+                                    }
+                                } ?: run {
+                                    onError("User not found after sign-up")
+                                }
                             } else {
                                 onError(signUpTask.exception?.message ?: "Sign-up failed")
                             }

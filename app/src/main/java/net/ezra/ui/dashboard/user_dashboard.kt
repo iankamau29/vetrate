@@ -1,9 +1,12 @@
+package net.ezra.ui.dashboard
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Refresh
@@ -20,12 +23,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
 import net.ezra.navigation.ROUTE_ADD_PRODUCT
+import net.ezra.navigation.ROUTE_ADD_SPECIALOFFER
 import net.ezra.navigation.ROUTE_ADD_STUDENTS
 import net.ezra.navigation.ROUTE_HOME
 import net.ezra.navigation.ROUTE_LOGIN
+import net.ezra.navigation.ROUTE_VIEW_USER_PRODUCTS
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,7 +69,7 @@ fun UserDashboardScreen(navController: NavHostController) {
                     },
                     navigationIcon = {
                         IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
                         }
                     },
                     actions = {
@@ -116,7 +119,7 @@ fun UserDashboardScreen(navController: NavHostController) {
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "Welcome",
+                            text = "Welcome: $userName",
                             style = MaterialTheme.typography.bodyLarge.copy(
                                 fontSize = 32.sp,
                                 color = Color.Gray,
@@ -151,17 +154,38 @@ fun UserDashboardScreen(navController: NavHostController) {
                         ) {
                             Text("Go to Home", color = Color.White)
                         }
-                        Button(onClick = {
-                            navController.navigate(ROUTE_ADD_PRODUCT)
-
-                        },
+                        Button(
+                            onClick = {
+                                navController.navigate(ROUTE_ADD_SPECIALOFFER)
+                            },
                             modifier = Modifier
                                 .padding(bottom = 16.dp)
                                 .fillMaxWidth(),
                             colors = ButtonDefaults.buttonColors(Color.Gray)
                         ) {
-
+                            Text("ADD SPECIAL OFFER")
+                        }
+                        Button(
+                            onClick = {
+                                navController.navigate(ROUTE_ADD_PRODUCT)
+                            },
+                            modifier = Modifier
+                                .padding(bottom = 16.dp)
+                                .fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(Color.Gray)
+                        ) {
                             Text("Add Product")
+                        }
+                        Button(
+                            onClick = {
+                                navController.navigate(ROUTE_VIEW_USER_PRODUCTS)
+                            },
+                            modifier = Modifier
+                                .padding(bottom = 16.dp)
+                                .fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(Color.Gray)
+                        ) {
+                            Text("View My Products")
                         }
                         Button(
                             onClick = {

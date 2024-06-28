@@ -33,11 +33,13 @@ import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ButtonDefaults
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import net.ezra.navigation.ROUTE_HOME
 import net.ezra.navigation.ROUTE_VIEW_PROD
+import net.ezra.navigation.ROUTE_VIEW_SPECIALOFFER
 import java.util.*
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
@@ -259,13 +261,21 @@ private fun addspecialoffersToFirestore(
     }
 
     val productId = UUID.randomUUID().toString()
+    val currentUser = FirebaseAuth.getInstance().currentUser
+
+    if (currentUser == null) {
+        // Handle user not logged in
+        onLoadingChange(false)
+        return
+    }
 
     val firestore = Firebase.firestore
     val productData = hashMapOf(
         "name" to productName,
         "description" to productDescription,
         "price" to productPrice,
-        "imageUrl" to ""
+        "imageUrl" to "",
+        "userId" to currentUser.uid
     )
 
     firestore.collection("special offers").document(productId)
@@ -283,7 +293,7 @@ private fun addspecialoffersToFirestore(
                         ).show()
 
                         // Navigate to another screen
-                        navController.navigate(ROUTE_HOME)
+                        navController.navigate(ROUTE_VIEW_SPECIALOFFER)
 
                         // Invoke the onProductAdded callback
                         onProductAdded()

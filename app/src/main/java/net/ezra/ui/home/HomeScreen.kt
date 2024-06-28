@@ -28,7 +28,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
@@ -36,28 +38,20 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -70,17 +64,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
+import net.ezra.R
 import net.ezra.navigation.ROUTE_ADD_PRODUCT
-import net.ezra.navigation.ROUTE_ADD_SPECIALOFFER
 import net.ezra.navigation.ROUTE_HOME
 import net.ezra.navigation.ROUTE_LOGIN
 import net.ezra.navigation.ROUTE_SHOPPING_CART
@@ -90,7 +86,6 @@ import net.ezra.navigation.ROUTE_VIEW_SPECIALOFFER
 import net.ezra.ui.products.Product
 import net.ezra.ui.products.ProductListItem
 import net.ezra.ui.products.fetchProducts
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 data class Screen(val title: String, val icon: Int)
 
@@ -135,69 +130,114 @@ fun HomeScreen(navController: NavHostController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeTopBar(searchQuery: String, onSearchQueryChange: (String) -> Unit, locationEnabled: Boolean, onLocationToggle: () -> Unit) {
-    CenterAlignedTopAppBar(
-        title = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
+    var userName by remember { mutableStateOf("Guest") }
+    var profilePictureUrl by remember { mutableStateOf("https://via.placeholder.com/150") } // Default profile picture URL
 
-                OutlinedTextField(
-                    value = searchQuery,
-                    onValueChange = onSearchQueryChange,
-                    placeholder = { Text("Search", color = Color.LightGray) },
-                    leadingIcon = {
-                        Icon(imageVector = Icons.Filled.Search, contentDescription = null, tint = Color.Gray)
-                    },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color.White,
-                        unfocusedBorderColor = Color.Black,
-                        focusedTextColor = Color.White,
-                        unfocusedTextColor = Color.Black,
-                        cursorColor = Color.White,
-                        focusedLeadingIconColor = Color.White,
-                        focusedLabelColor = Color.White,
-                    ),
+    // Fetch user data from Firebase Authentication
+    LaunchedEffect(Unit) {
+        val user = Firebase.auth.currentUser
+        if (user != null) {
+            userName = user.displayName ?: "No Name"
+            profilePictureUrl = user.photoUrl?.toString() ?: profilePictureUrl
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .background(Color.Black)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = rememberImagePainter(profilePictureUrl),
+                    contentDescription = "Profile Picture",
                     modifier = Modifier
-                        .weight(1f)
-                        .height(50.dp)
+                        .size(50.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Row {
-                    IconButton(onClick = onLocationToggle) {
-                        Icon(
-                            imageVector = if (locationEnabled) Icons.Filled.LocationOn else Icons.Filled.LocationOn,
-                            contentDescription = "Location Toggle",
-                            tint = Color(0xffffa500)
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    IconButton(onClick = {
-                        // Navigate to settings screen
-                    }) {
-                        Icon(
-                            imageVector = Icons.Filled.Settings,
-                            contentDescription = "Settings",
-                            tint = Color(0xffffa500)
-                        )
-                    }
+                Column {
+                    Text(
+                        text = "Good Morning",
+                        color = Color.Gray,
+                        fontSize = 14.sp
+                    )
+                    Text(
+                        text = userName,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
                 }
             }
-        },
-        navigationIcon = {
-            IconButton(onClick = { /* Open Drawer */ }) {
-                Icon(Icons.Default.Menu, contentDescription = "Menu", tint = Color(0xffffa500))
+            Row {
+                IconButton(onClick = { /* TODO: Handle Notification Click */ }) {
+                    Icon(
+                        imageVector = Icons.Default.Notifications,
+                        contentDescription = "Notifications",
+                        tint = Color.White
+                    )
+                }
+                IconButton(onClick = { /* TODO: Handle Favorite Click */ }) {
+                    Icon(
+                        imageVector = Icons.Default.Favorite,
+                        contentDescription = "Favorite",
+                        tint = Color.White
+                    )
+                }
             }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.DarkGray,
-            titleContentColor = Color.White
-        )
-    )
-    Spacer(modifier = Modifier.height(30.dp))
-}
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            BasicTextField(
+                value = searchQuery,
+                onValueChange = onSearchQueryChange,
+                singleLine = true,
+                modifier = Modifier
+                    .weight(1f)
+                    .height(50.dp)
+                    .background(Color.DarkGray, shape = CircleShape)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                if (searchQuery.isEmpty()) {
+                    Text(
+                        text = "Looking For Shoes",
+                        modifier = Modifier,
+                        color = Color.Gray,
+                        fontSize = 16.sp,
 
+                        )
+                } else {
+                    Text(
+                        text = searchQuery,
+                        color = Color.White,
+                        fontSize = 16.sp
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            IconButton(onClick = { /* TODO: Handle Settings Click */ }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_settings), // Replace with your own settings icon
+                    contentDescription = "Settings",
+                    tint = Color.White
+                )
+            }
+        }
+    }
+}
 @Composable
 fun HomeContent(
     navController: NavHostController,
@@ -212,7 +252,7 @@ fun HomeContent(
             .fillMaxSize()
             .clickable { if (isDrawerOpen) onDrawerClose() }
     ) {
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(80.dp))
             Column(
                 
                 modifier = Modifier
@@ -220,7 +260,7 @@ fun HomeContent(
                     .background(Color.White),
             ) {
 
-                Spacer(modifier = Modifier.height(80.dp))
+                Spacer(modifier = Modifier.height(160.dp))
                 Row{
                     Text("Special Offers")
                     Spacer(modifier = Modifier.width(130.dp))

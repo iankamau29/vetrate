@@ -67,9 +67,12 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import net.ezra.navigation.ROUTE_LOGIN
 
 data class Product(
@@ -95,6 +98,7 @@ fun ProductListScreen(navController: NavController, products: List<Product>) {
         fetchProducts { fetchedProducts ->
             productList = fetchedProducts
             isLoading = false
+            displayedProductCount = 10
         }
     }
 
@@ -117,7 +121,7 @@ fun ProductListScreen(navController: NavController, products: List<Product>) {
                 },
 
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xff0FB06A),
+                    containerColor = Color.Gray,
                     titleContentColor = Color.White,
 
                     )
@@ -128,7 +132,7 @@ fun ProductListScreen(navController: NavController, products: List<Product>) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xff9AEDC9))
+                    .background(Color.White)
             ) {
                 if (isLoading) {
                     // Progress indicator
@@ -156,8 +160,8 @@ fun ProductListScreen(navController: NavController, products: List<Product>) {
                         // Load More Button
                         if (displayedProductCount < productList.size) {
                             Button(
-                                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff0FB06A)),
-                                onClick = { displayedProductCount += 1 },
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
+                                onClick = { displayedProductCount += 8 },
                                 modifier = Modifier.align(Alignment.CenterHorizontally)
                             ) {
                                 Text(text = "Load More")
